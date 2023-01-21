@@ -628,7 +628,7 @@ def addlabels(x, y):
 if __name__ == "__main__":
     plt.close('all')
     
-    xlsx = pd.read_excel("master_NFL2000-2022.xlsx")
+    xlsx = pd.read_excel("data/master_NFL2000-2022.xlsx")
     xlsx = xlsx.fillna('')
     
     referee_list = list(set(xlsx.Referee))
