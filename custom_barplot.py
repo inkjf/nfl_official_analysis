@@ -71,8 +71,14 @@ def bar_plot(ax, data, group_stretch=0.8, bar_stretch=0.95,
                 x_pos = bar.get_x() + (bar.get_width() / 2.0)
                 y_pos = val + barlabel_offset
                 barlbl = bar_labeler(g_name, val_i, val)
-                ax.text(x_pos, y_pos, barlbl+barlbl_add, ha="center", va="bottom",
-                        fontsize=label_fontsize)
+                
+                if isinstance(barlbl_add, dict):
+                    ax.text(x_pos, y_pos, ' '.join((barlbl+'yds', barlbl_add[g_name][val_i])), ha="center", va="bottom",
+                            fontsize=label_fontsize)
+                if isinstance(barlbl_add, str):
+                    ax.text(x_pos, y_pos, barlbl + barlbl_add, ha="center", va="bottom",
+                            fontsize=label_fontsize)
+                
                 ax.text(x_pos, l_pos, bar_labeler_text[val_i], ha="center", color="white")
     if legend:
         handles = []

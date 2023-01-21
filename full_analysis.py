@@ -291,14 +291,24 @@ def generate_conference_comparison(data, ref_list):
                                                )
                 
                 plot_dict = {key: [] for key in df_home_fav.index }
+                label_dict = {key: [] for key in df_home_fav.index }
+                
                 
                 if not df_home_fav.empty:                    
                     [plot_dict[k].append(df_home_fav.ATS[k] * 100) for k in df_home_fav.index]
                     [plot_dict[k].append(df_away_fav.ATS[k] * 100) for k in df_away_fav.index]
                     
+                    # game_num_bar_labels = []
+                    # [game_num_bar_labels.append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+                    # [game_num_bar_labels.append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+                    
+                    [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+                    [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+                    
                     bar_plot(ax[i], plot_dict, group_stretch=0.8, bar_stretch=0.75, legend=True,
                              x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
-                             bar_labeler=lambda k, i, s: str(int(s)))
+                             bar_labeler=lambda k, i, s: str(int(s)), bar_labeler_text=['Home','Away'],
+                             barlbl_add=label_dict)
                     
                     ax[i].set_title(' '.join((conf, ' ATS as '+fav_str+' with', ref, 'Officiating')))
                     
@@ -348,17 +358,19 @@ def generate_conference_comparison_noref(data):
                                      )
             
             plot_dict = {key: [] for key in df_home_fav.index }
+            label_dict = {key: [] for key in df_home_fav.index }
             
-            if not df_home_fav.empty:
-                # fig = plt.figure(figsize=(12.0, 5.5), dpi=120)
-                # ax = fig.add_subplot(111)
-                
+            if not df_home_fav.empty:                
                 [plot_dict[k].append(df_home_fav.ATS[k] * 100) for k in df_home_fav.index]
                 [plot_dict[k].append(df_away_fav.ATS[k] * 100) for k in df_away_fav.index]
                 
+                [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+                [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+                
                 bar_plot(ax[i], plot_dict, group_stretch=0.8, bar_stretch=0.75, legend=True,
                          x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
-                         bar_labeler=lambda k, i, s: str(int(s)))
+                         bar_labeler=lambda k, i, s: str(int(s)), bar_labeler_text=['Home','Away'],
+                         barlbl_add=label_dict)
                 
                 ax[i].set_title(' '.join((conf, 'Performance ATS as '+fav_str)))
                 
@@ -484,7 +496,8 @@ def generate_team_comparisons(data):
     year_list = ['all', '2001-2019', '2018-2022', '2020-2023', '2018-2023']
 
     fig, ax = plt.subplots(2, 1, sharex=False, figsize=(13.5, 9.0), dpi=120)
-    fig1, ax1 = plt.subplots(2, 1, sharex=False, figsize=(13.5, 9.0), dpi=120)
+    fig1, ax1 = plt.subplots(2, 1, sharex=False, figsize=(20., 9.0), dpi=120)
+    fig2, ax2 = plt.subplots(2, 1, sharex=False, figsize=(13.5, 9.0), dpi=120)
     
     for i, fav in enumerate([True, False]):
         fav_str = 'Favorites' if fav else 'Dogs'
@@ -504,6 +517,8 @@ def generate_team_comparisons(data):
                                  )
         
         plot_dict = {key: [] for key in df_home_fav.index }
+        label_dict = {key: [] for key in df_home_fav.index }
+                
         
         if not df_home_fav.empty:
             # =============================================================================
@@ -512,10 +527,13 @@ def generate_team_comparisons(data):
             [plot_dict[k].append(df_home_fav.ATS[k] * 100) for k in teams_list]
             [plot_dict[k].append(df_away_fav.ATS[k] * 100) for k in teams_list]
             
+            [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+            [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+            
             bar_plot(ax[i], plot_dict, group_stretch=0.8, bar_stretch=0.75, legend=True,
                      x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
                      bar_labeler=lambda k, i, s: str(int(s)), 
-                     bar_labeler_text=['Home','Away'], barlbl_add='%')
+                     bar_labeler_text=['Home','Away'], barlbl_add=label_dict)
             
             ax[i].set_xticklabels(['Allen-Era Bills (2018-2023)',
                                    'Burrow-Era Bengals (2020-2023)',
@@ -550,17 +568,22 @@ def generate_team_comparisons(data):
                                      )
             
             plot_dict = {key: [] for key in df_home_fav.index }
+            label_dict = {key: [] for key in df_home_fav.index }
             [plot_dict[k].append(df_home_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
             [plot_dict[k].append(df_home_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
+            [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+            [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
             
             [plot_dict[k].append(df_away_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
             [plot_dict[k].append(df_away_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
+            [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+            [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
             
             
             bar_plot(ax1[i], plot_dict, group_stretch=0.8, bar_stretch=0.8, legend=True,
                       x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
                       bar_labeler=lambda k, i, s: str(int(s)), 
-                      bar_labeler_text=['Home', 'Opp.', 'Away', 'Opp'], barlbl_add=' yds')
+                      bar_labeler_text=['Home', 'Opp.', 'Away', 'Opp'], barlbl_add=label_dict)
             
             ax1[i].set_xticklabels(['Allen-Era Bills (2018-2023)',
                                    'Burrow-Era Bengals (2020-2023)',
@@ -574,48 +597,53 @@ def generate_team_comparisons(data):
             ax1[i].patch.set_edgecolor('k')
             fig1.tight_layout()
             
-            # # =============================================================================
-            # #             Average Penalty Yards as Home-Favorites vs Opp
-            # # =============================================================================
-            # teams_list2 = ['League', 'New England Patriots', 'Tampa Bay Buccaneers']
-            # year_list2 = ['all', '2001-2019', '2020-2023']
+            # =============================================================================
+            #             Average Penalty Yards as Home-Favorites vs Opp
+            # =============================================================================
+            teams_list2 = ['League', 'New England Patriots', 'Tampa Bay Buccaneers']
+            year_list2 = ['all', '2001-2019', '2020-2023']
             
-            # df_home_fav = ats_no_ref(data, 
-            #                          teams=teams_list2,
-            #                          year_range_list=year_list2, 
-            #                          atHome=True, 
-            #                          favorite=fav
-            #                          )
+            df_home_fav = ats_no_ref(data, 
+                                      teams=teams_list2,
+                                      year_range_list=year_list2, 
+                                      atHome=True, 
+                                      favorite=fav
+                                      )
             
-            # df_away_fav = ats_no_ref(data, 
-            #                          teams=teams_list2,
-            #                          year_range_list=year_list2, 
-            #                          atHome=False, 
-            #                          favorite=fav
-            #                          )
+            df_away_fav = ats_no_ref(data, 
+                                      teams=teams_list2,
+                                      year_range_list=year_list2, 
+                                      atHome=False, 
+                                      favorite=fav
+                                      )
             
-            # plot_dict = {key: [] for key in df_home_fav.index }
-            # [plot_dict[k].append(df_home_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
-            # [plot_dict[k].append(df_home_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
+            plot_dict = {key: [] for key in df_home_fav.index }
+            label_dict = {key: [] for key in df_home_fav.index }
+            [plot_dict[k].append(df_home_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
+            [plot_dict[k].append(df_home_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
+            [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
+            [label_dict[k].append('(' + str(df_home_fav.GameCount[k]) + ')') for k in df_home_fav.index]
             
-            # [plot_dict[k].append(df_away_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
-            # [plot_dict[k].append(df_away_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
+            [plot_dict[k].append(df_away_fav.OppAveragePenaltyYards[k]) for k in teams_list2]
+            [plot_dict[k].append(df_away_fav.TmAveragePenaltyYards[k]) for k in teams_list2]
+            [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
+            [label_dict[k].append('(' + str(df_away_fav.GameCount[k]) + ')') for k in df_away_fav.index]
             
             
-            # bar_plot(ax1[i], plot_dict, group_stretch=0.8, bar_stretch=0.8, legend=True,
-            #           x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
-            #           bar_labeler=lambda k, i, s: str(int(s)), 
-            #           bar_labeler_text=['Home', 'Opp.', 'Away', 'Opp'], barlbl_add=' yds')
+            bar_plot(ax2[i], plot_dict, group_stretch=0.8, bar_stretch=0.8, legend=True,
+                      x_labels=True, label_fontsize=8, barlabel_offset=0.05,colors=Teams,
+                      bar_labeler=lambda k, i, s: str(int(s)), 
+                      bar_labeler_text=['Home', 'Opp.', 'Away', 'Opp'], barlbl_add=label_dict)
             
-            # ax1[i].set_xticklabels(['League Average',
-            #                         'Brady-Era Patriots (2001-2019)',
-            #                         'Brady-Era Buccs (2020-2023)',])
-            # axis_list = ['Team', 'Opponent']
-            # ax1[i].set_title('Brady-Era Penalty Yards as ' + fav_str)
-            # ax1[i].set_ylabel("Average Penalty Yards [Yards]")
-            # ax1[i].set_yticks(np.arange(0, 110, 10))
-            # ax1[i].patch.set_edgecolor('k')
-            # fig1.tight_layout()
+            ax2[i].set_xticklabels(['League Average',
+                                    'Brady-Era Patriots (2001-2019)',
+                                    'Brady-Era Buccs (2020-2023)',])
+            axis_list = ['Team', 'Opponent']
+            ax2[i].set_title('Brady-Era Penalty Yards as ' + fav_str)
+            ax2[i].set_ylabel("Average Penalty Yards [Yards]")
+            ax2[i].set_yticks(np.arange(0, 110, 10))
+            ax2[i].patch.set_edgecolor('k')
+            fig1.tight_layout()
             
             # plt.savefig('output/interesting_plots/' + 'Interesting_AllRefs' + '.png')
 
@@ -638,34 +666,34 @@ if __name__ == "__main__":
         'Clete Blakeman',
         'Jerome Boger',
         'Carl Cheffers',
-        'Tony Corrente',
-        'Shawn Hochuli',
+        # 'Tony Corrente',
+        # 'Shawn Hochuli',
         'Bill Vinovich',
-        'Land Clark',
+        # 'Land Clark',
         'Ron Torbert',
-        'Adrian Hill',
-        'Craig Wrolstad',
-        'Scott Novak',
-        'John Hussey',
-        'Brad Rodgers',
-        'Alex Kemp',
-        'Clay Martin',
-        'Shawn Smith',
-        'Brad Allen',
-        'Tra Blake',
-        'Don Willard',
-        'Walt Anderson'
+        # 'Adrian Hill',
+        # 'Craig Wrolstad',
+        # 'Scott Novak',
+        # 'John Hussey',
+        # 'Brad Rodgers',
+        # 'Alex Kemp',
+        # 'Clay Martin',
+        # 'Shawn Smith',
+        # 'Brad Allen',
+        # 'Tra Blake',
+        # 'Don Willard',
+        # 'Walt Anderson'
         ]
     
     # generate_conference_comparison_noref(data=xlsx)
     # generate_conference_comparison_noref_bigplot(data=xlsx)
     # generate_conference_comparison(data=xlsx, ref_list=active_refs)
-    # generate_team_comparisons(xlsx)
+    generate_team_comparisons(xlsx)
     
-    for fav in [True, False]:
-        fav_str = 'Favorites' if fav else 'Dogs'
-        generate_conference_comparison(data=xlsx, 
-                                        ref_list=active_refs,
-                                        favorite=fav, 
-                                        favorite_str=fav_str
-                                        )
+    # for fav in [True, False]:
+    #     fav_str = 'Favorites' if fav else 'Dogs'
+    #     generate_conference_comparison(data=xlsx, 
+    #                                     ref_list=active_refs,
+    #                                     favorite=fav, 
+    #                                     favorite_str=fav_str
+    #                                     )
